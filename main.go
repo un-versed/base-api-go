@@ -5,8 +5,10 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/kataras/iris/v12"
 	"github.com/sirupsen/logrus"
 	"github.com/un-versed/base_api/app"
+	"github.com/un-versed/base_api/controllers"
 )
 
 func getDefaultPort() int {
@@ -46,6 +48,21 @@ func main() {
 
 	logrus.Debug("START")
 
-	_ = app.App().RunServer(*serverPort)
+	_app := app.App()
+	createRoutes(_app)
+	_app.RunServer(*serverPort)
+}
+
+func createRoutes(a *app.Application) {
+	cl := make([]controllers.Router, 0)
+	cl = append(cl, controllers.NewHealthController())
+
+	for _, c := range cl {
+		c.Route(a.IrisApp())
+	}
+
+	a.IrisApp().Handle("ALL", "/*", func(ctx iris.Context) {
+		ctx.StatusCode(404)
+	})
 
 }

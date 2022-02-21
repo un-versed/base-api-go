@@ -10,25 +10,28 @@ import (
 	"github.com/kataras/iris/v12/middleware/logger"
 	"github.com/kataras/iris/v12/middleware/recover"
 	"github.com/sirupsen/logrus"
-	"github.com/un-versed/base_api/controllers"
 )
 
-var appInstance *application
+var appInstance *Application
 var appOnce sync.Once
 
-type application struct {
+type Application struct {
 	iris *iris.Application
 }
 
-func App() *application {
+func App() *Application {
 	appOnce.Do(func() {
-		appInstance = &application{iris: iris.New()}
+		appInstance = &Application{iris: iris.New()}
 		appInstance.initialize()
 	})
 	return appInstance
 }
 
-func (app *application) initialize() {
+func (app *Application) IrisApp() *iris.Application {
+	return app.iris
+}
+
+func (app *Application) initialize() {
 	app.iris.Logger().SetLevel("info")
 	app.iris.Use(recover.New())
 	app.iris.Use(logger.New(logger.Config{
@@ -50,28 +53,16 @@ func (app *application) initialize() {
 		},
 		Skippers: nil,
 	}))
-
-	app.createRoutes()
 }
 
-func (app *application) RunServer(port int) error {
+func (app *Application) RunServer(port int) error {
 	return app.iris.Run(iris.Addr(fmt.Sprintf(":%d", port)), iris.WithoutServerError(iris.ErrServerClosed))
 }
 
-func (app *application) ShutdownServer() error {
+func (app *Application) ShutdownServer() error {
 	return app.iris.Shutdown(context.NewContext(app.iris))
 }
 
-func (app *application) IrisApp() *iris.Application {
-	return app.iris
-}
-
-func (app *application) createRoutes() {
-	healthController := controllers.NewHealthController()
-
-	app.iris.Get("/health", healthController.Get)
-
-	app.iris.Handle("ALL", "/*", func(ctx iris.Context) {
-		ctx.StatusCode(404)
-	})
-}
+// func (app *apiris.Handle("ALL", "/*", func(ctx iris.Context) {
+// 	ctx.StatusCode(404)
+// })

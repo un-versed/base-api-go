@@ -3,22 +3,18 @@ package controllers
 import (
 	"testing"
 
-	"github.com/kataras/iris/v12/context"
+	"github.com/kataras/iris/v12"
+	"github.com/kataras/iris/v12/httptest"
 	"github.com/un-versed/base_api/app"
 )
 
 func TestHealthController_Get(t *testing.T) {
-	a := app.App()
-	i := a.IrisApp()
-	ctx := context.NewContext(i)
+	ia := app.App().IrisApp()
+	NewHealthController().Route(ia)
 
-	healthController := NewHealthController()
+	e := httptest.New(t, ia)
 
-	healthController.Get(ctx)
-
-	if ctx.GetStatusCode() != 200 {
-		t.Errorf("")
-	}
+	e.GET("/health").Expect().Status(httptest.StatusOK).JSON().Equal(iris.Map{"status": "ok"})
 }
 
 func TestHealthController_Sum(t *testing.T) {
