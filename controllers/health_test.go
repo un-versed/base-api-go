@@ -5,11 +5,11 @@ import (
 
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/httptest"
-	"github.com/un-versed/base_api/app"
+	"github.com/un-versed/base_api/application"
 )
 
 func TestHealthController_Get(t *testing.T) {
-	ia := app.App().IrisApp()
+	ia := application.App().IrisApp()
 	CreateRoutes(ia)
 
 	e := httptest.New(t, ia)

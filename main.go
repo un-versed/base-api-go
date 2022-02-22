@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/sirupsen/logrus"
-	"github.com/un-versed/base_api/app"
+	"github.com/un-versed/base_api/application"
 	"github.com/un-versed/base_api/controllers"
 )
 
@@ -47,7 +47,7 @@ func main() {
 
 	logrus.Debug("START")
 
-	_app := app.App()
+	_app := application.App()
 
 	controllers.CreateRoutes(_app.IrisApp())
 	_app.RunServer(*serverPort)

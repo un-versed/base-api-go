@@ -4,11 +4,11 @@ import (
 	"testing"
 
 	"github.com/kataras/iris/v12/httptest"
-	"github.com/un-versed/base_api/app"
+	"github.com/un-versed/base_api/application"
 )
 
 func TestNotFoundRoutes(t *testing.T) {
-	ia := app.App().IrisApp()
+	ia := application.App().IrisApp()
 	CreateRoutes(ia)
 
 	e := httptest.New(t, ia)
