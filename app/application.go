@@ -62,7 +62,3 @@ func (app *Application) RunServer(port int) error {
 func (app *Application) ShutdownServer() error {
 	return app.iris.Shutdown(context.NewContext(app.iris))
 }
-
-// func (app *apiris.Handle("ALL", "/*", func(ctx iris.Context) {
-// 	ctx.StatusCode(404)
-// })

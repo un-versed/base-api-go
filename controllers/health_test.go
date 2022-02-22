@@ -10,7 +10,7 @@ import (
 
 func TestHealthController_Get(t *testing.T) {
 	ia := app.App().IrisApp()
-	NewHealthController().Route(ia)
+	CreateRoutes(ia)
 
 	e := httptest.New(t, ia)
 

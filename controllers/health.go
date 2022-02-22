@@ -11,10 +11,6 @@ func NewHealthController() *HealthController {
 	return &HealthController{}
 }
 
-func (c *HealthController) Route(irisApp *iris.Application) {
-	irisApp.Get("/health", c.Get)
-}
-
 func (c *HealthController) Get(ctx iris.Context) {
 	ctx.StatusCode(200)
 	ctx.JSON(iris.Map{"status": "ok"})

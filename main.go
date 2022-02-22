@@ -5,7 +5,6 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/kataras/iris/v12"
 	"github.com/sirupsen/logrus"
 	"github.com/un-versed/base_api/app"
 	"github.com/un-versed/base_api/controllers"
@@ -49,20 +48,7 @@ func main() {
 	logrus.Debug("START")
 
 	_app := app.App()
-	createRoutes(_app)
+
+	controllers.CreateRoutes(_app.IrisApp())
 	_app.RunServer(*serverPort)
-}
-
-func createRoutes(a *app.Application) {
-	cl := make([]controllers.Router, 0)
-	cl = append(cl, controllers.NewHealthController())
-
-	for _, c := range cl {
-		c.Route(a.IrisApp())
-	}
-
-	a.IrisApp().Handle("ALL", "/*", func(ctx iris.Context) {
-		ctx.StatusCode(404)
-	})
-
 }
