@@ -8,6 +8,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/un-versed/base_api/application"
 	"github.com/un-versed/base_api/controllers"
+	"github.com/un-versed/base_api/db"
 )
 
 func getDefaultPort() int {
@@ -49,6 +50,9 @@ func main() {
 
 	_app := application.App()
 
+	db.Open()
+
 	controllers.CreateRoutes(_app.IrisApp())
 	_app.RunServer(*serverPort)
+
 }
