@@ -20,6 +20,7 @@ require (
 	github.com/jackc/pgtype v1.10.0 // indirect
 	github.com/jackc/pgx/v4 v4.15.0 // indirect
 	github.com/jackc/puddle v1.2.1 // indirect
+	github.com/joho/godotenv v1.4.0 // indirect
 	github.com/ryanuber/columnize v2.1.0+incompatible // indirect
 )
 

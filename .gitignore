@@ -24,3 +24,5 @@ desafio-dev-api-rest
 resources/resources.go
 build/
 base_api
+
+.env
