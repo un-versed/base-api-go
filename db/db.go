@@ -1,24 +1,27 @@
 package db
 
 import (
-	"log"
+	"context"
+	"os"
 
-	"github.com/jmoiron/sqlx"
+	"github.com/jackc/pgx/v4/pgxpool"
 	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
 )
 
-func Open() *sqlx.DB {
-	db, err := sqlx.Connect("postgres", "user=gustavo dbname=go_base_api password=123teste sslmode=disable")
+func Open() *pgxpool.Pool {
+	dbpool, err := pgxpool.Connect(context.Background(), "postgres://gustavo:123teste@localhost:5432/go_base_api")
+
 	if err != nil {
-		log.Fatalln(err)
+		logrus.Fatal(os.Stderr, "Unable to connect to database: %v\n", err)
+		os.Exit(1)
 	} else {
 		logrus.Info("Connected to database")
 	}
 
-	return db
+	return dbpool
 }
 
-func Close(db *sqlx.DB) error {
-	return db.Close()
+func Close(dbpool *pgxpool.Pool) {
+	dbpool.Close()
 }
