@@ -50,7 +50,8 @@ func main() {
 
 	_app := application.App()
 
-	db.Open()
+	conn := db.Open()
+	defer db.Close(conn)
 
 	controllers.CreateRoutes(_app.IrisApp())
 	_app.RunServer(*serverPort)
