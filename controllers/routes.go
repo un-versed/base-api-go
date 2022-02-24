@@ -14,16 +14,16 @@ func CreateRoutes(irisApp *iris.Application) {
 		// GET: http://localhost:{port}/users
 		usersApi.Get("/", usersController.Index)
 
-		// // GET: http://localhost:{port}/users/:id
+		// GET: http://localhost:{port}/users/:id
 		usersApi.Get("/{id:int64}", usersController.Show)
 
-		// // POST: http://localhost:{port}/users
+		// POST: http://localhost:{port}/users
 		usersApi.Post("/", usersController.Store)
 
-		// // PUT: http://localhost:{port}/users/:id
+		// PUT: http://localhost:{port}/users/:id
 		usersApi.Put("/{id:int64}", usersController.Update)
 
-		// // PUT: http://localhost:{port}/users/:id
+		// PUT: http://localhost:{port}/users/:id
 		usersApi.Delete("/{id:int64}", usersController.Delete)
 	}
 

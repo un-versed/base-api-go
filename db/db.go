@@ -1,27 +1,31 @@
 package db
 
 import (
-	"context"
 	"os"
 
-	"github.com/jackc/pgx/v4/pgxpool"
-	_ "github.com/lib/pq"
+	"github.com/jackc/pgx/v4"
+	"github.com/jackc/pgx/v4/stdlib"
 	"github.com/sirupsen/logrus"
+	"github.com/uptrace/bun"
+	"github.com/uptrace/bun/dialect/pgdialect"
 )
 
-func Open() *pgxpool.Pool {
-	dbpool, err := pgxpool.Connect(context.Background(), os.Getenv("DATABASE_URL"))
-
+func Open() *bun.DB {
+	config, err := pgx.ParseConfig(os.Getenv("DATABASE_URL"))
 	if err != nil {
 		logrus.Fatal(os.Stderr, "Unable to connect to database: %v\n", err)
-		os.Exit(1)
+		panic(err)
 	} else {
 		logrus.Info("Connected to database")
 	}
+	config.PreferSimpleProtocol = true
 
-	return dbpool
+	sqldb := stdlib.OpenDB(*config)
+	db := bun.NewDB(sqldb, pgdialect.New())
+
+	return db
 }
 
-func Close(dbpool *pgxpool.Pool) {
-	dbpool.Close()
+func Close(db *bun.DB) {
+	db.Close()
 }
