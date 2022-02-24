@@ -5,6 +5,7 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
 	"github.com/un-versed/base_api/application"
 	"github.com/un-versed/base_api/controllers"
@@ -42,6 +43,11 @@ func main() {
 	logLevel := logrus.InfoLevel
 	if *logAll {
 		logLevel = logrus.TraceLevel
+	}
+
+	err := godotenv.Load()
+	if err != nil {
+		logrus.Fatal("Error loading .env file")
 	}
 
 	initLogger(logLevel)
