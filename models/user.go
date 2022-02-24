@@ -1,6 +1,9 @@
 package models
 
 import (
+	"context"
+
+	"github.com/sirupsen/logrus"
 	"github.com/un-versed/base_api/db"
 )
 
@@ -12,46 +15,61 @@ type User struct {
 
 func GetUsers() ([]User, error) {
 	db := db.Open()
-	defer db.Close()
 
-	users := []User{}
+	var users []User
+	var tmp User
 
-	err := db.Select(&users, "SELECT * FROM users ORDER BY id ASC;")
+	rows, err := db.Query(context.Background(), "SELECT * FROM users ORDER BY id ASC;")
+	if err != nil {
+		logrus.Error(err, "Error selecting users")
+		return users, err
+	}
 
+	defer rows.Close()
+
+	for rows.Next() {
+		rows.Scan(&tmp.ID, &tmp.Email, &tmp.Password)
+		users = append(users, tmp)
+	}
+
+	if rows.Err() != nil {
+		logrus.Error("Error reading row: ", err)
+		return users, err
+	}
 	return users, err
 }
 
 func GetUser(id int64) (User, error) {
 	db := db.Open()
-	defer db.Close()
 
 	user := User{}
 
-	err := db.Get(&user, "SELECT * FROM users WHERE id = $1 ORDER BY id ASC;", id)
+	row := db.QueryRow(context.Background(), "SELECT * FROM users WHERE id = $1 ORDER BY id ASC;", id)
+	err := row.Scan(&user.ID, &user.Email, &user.Password)
+	if err != nil {
+		logrus.Error("Error selecting user:", err)
+		return user, err
+	}
 
 	return user, err
 }
 
 func NewUser(u *User) (User, error) {
 	db := db.Open()
-	defer db.Close()
 
 	user := User{}
-
-	stmt, err := db.PrepareNamed(`INSERT INTO users (email, password) VALUES (:email, :password) RETURNING id;`)
-	if err != nil {
-		return user, err
-	}
-
 	var id int64
 
-	err = stmt.Get(&id, u)
+	row := db.QueryRow(context.Background(), `INSERT INTO users (email, password) VALUES ($1, $2) RETURNING id;`, &u.Email, &u.Password)
+	err := row.Scan(&id)
 	if err != nil {
+		logrus.Error("Error inserting user:", err)
 		return user, err
 	}
 
-	err = db.Get(&user, "SELECT * FROM users WHERE id = $1 ORDER BY id ASC;", id)
+	user, err = GetUser(id)
 	if err != nil {
+		logrus.Error("Error fetching user:", err)
 		return user, err
 	}
 
@@ -60,18 +78,22 @@ func NewUser(u *User) (User, error) {
 
 func UpdateUser(u *User) error {
 	db := db.Open()
-	defer db.Close()
 
-	_, err := db.NamedExec(`UPDATE users SET email=:email, password=:password WHERE id=:id;`, u)
+	_, err := db.Exec(context.Background(), `UPDATE users SET email=$1, password=$2 WHERE id=$3;`, &u.Email, &u.Password, &u.ID)
+	if err != nil {
+		logrus.Error("Error updating user:", err)
+	}
 
 	return err
 }
 
 func DeleteUser(u *User) error {
 	db := db.Open()
-	defer db.Close()
 
-	_, err := db.NamedExec(`DELETE FROM users WHERE id=:id;`, u)
+	_, err := db.Exec(context.Background(), `DELETE FROM users WHERE id=$1;`, &u.ID)
+	if err != nil {
+		logrus.Error("Error deleting user:", err)
+	}
 
 	return err
 }

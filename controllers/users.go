@@ -27,7 +27,7 @@ func (c *UsersController) Index(ctx iris.Context) {
 func (c *UsersController) Show(ctx iris.Context) {
 	id := ctx.Params().GetInt64Default("id", 0)
 
-	users, err := models.GetUser(id)
+	user, err := models.GetUser(id)
 	if err != nil {
 		ctx.StatusCode(iris.StatusBadRequest)
 		ctx.JSON(models.NewApiError(err.Error()))
@@ -35,13 +35,13 @@ func (c *UsersController) Show(ctx iris.Context) {
 	}
 
 	ctx.StatusCode(iris.StatusOK)
-	ctx.JSON(users)
+	ctx.JSON(user)
 }
 
 func (c *UsersController) Store(ctx iris.Context) {
 	var u models.User
-	err := ctx.ReadJSON(&u)
 
+	err := ctx.ReadJSON(&u)
 	if err != nil {
 		ctx.StatusCode(iris.StatusBadRequest)
 		ctx.JSON(models.NewApiError(err.Error()))
@@ -90,15 +90,7 @@ func (c *UsersController) Delete(ctx iris.Context) {
 	var u models.User
 	u.ID = id
 
-	err := ctx.ReadJSON(&u)
-
-	if err != nil {
-		ctx.StatusCode(iris.StatusBadRequest)
-		ctx.JSON(models.NewApiError(err.Error()))
-		return
-	}
-
-	err = models.DeleteUser(&u)
+	err := models.DeleteUser(&u)
 	if err != nil {
 		ctx.StatusCode(iris.StatusBadRequest)
 		ctx.JSON(models.NewApiError(err.Error()))
