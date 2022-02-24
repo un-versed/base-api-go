@@ -10,7 +10,7 @@ import (
 )
 
 func Open() *pgxpool.Pool {
-	dbpool, err := pgxpool.Connect(context.Background(), "postgres://gustavo:123teste@localhost:5432/go_base_api")
+	dbpool, err := pgxpool.Connect(context.Background(), os.Getenv("DATABASE_URL"))
 
 	if err != nil {
 		logrus.Fatal(os.Stderr, "Unable to connect to database: %v\n", err)
