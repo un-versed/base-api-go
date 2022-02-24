@@ -1,99 +1,64 @@
 package models
 
 import (
-	"context"
-
 	"github.com/sirupsen/logrus"
 	"github.com/un-versed/base_api/db"
 )
 
 type User struct {
-	ID       int64  `json:"id" db:"id"`
-	Email    string `json:"email" db:"email"`
-	Password string `json:"password" db:"password"`
+	XID      int64  `json:"id" db:"id"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
 }
 
 func GetUsers() ([]User, error) {
-	db := db.Open()
+	var ul []User
 
-	var users []User
-	var tmp User
-
-	rows, err := db.Query(context.Background(), "SELECT * FROM users ORDER BY id ASC;")
+	res, err := db.Query("SELECT id, email, password FROM users ORDER BY id ASC;")
 	if err != nil {
-		logrus.Error(err, "Error selecting users")
-		return users, err
+		logrus.Error(err)
+		return ul, err
 	}
 
-	defer rows.Close()
+	err = res.ScanAll(&ul)
 
-	for rows.Next() {
-		rows.Scan(&tmp.ID, &tmp.Email, &tmp.Password)
-		users = append(users, tmp)
-	}
-
-	if rows.Err() != nil {
-		logrus.Error("Error reading row: ", err)
-		return users, err
-	}
-	return users, err
+	return ul, err
 }
 
 func GetUser(id int64) (User, error) {
-	db := db.Open()
+	u := User{}
 
-	user := User{}
-
-	row := db.QueryRow(context.Background(), "SELECT * FROM users WHERE id = $1 ORDER BY id ASC;", id)
-	err := row.Scan(&user.ID, &user.Email, &user.Password)
+	res, err := db.Query("SELECT * FROM users WHERE id = $1 ORDER BY id ASC;", id)
 	if err != nil {
-		logrus.Error("Error selecting user:", err)
-		return user, err
+		return u, err
 	}
 
-	return user, err
+	err = res.ScanFirst(&u)
+	return u, err
 }
 
-func NewUser(u *User) (User, error) {
-	db := db.Open()
+func NewUser(user *User) (User, error) {
+	u := User{}
 
-	user := User{}
-	var id int64
-
-	row := db.QueryRow(context.Background(), `INSERT INTO users (email, password) VALUES ($1, $2) RETURNING id;`, &u.Email, &u.Password)
-	err := row.Scan(&id)
+	res, err := db.Query("INSERT INTO users (email, password) VALUES ($1, $2) RETURNING id;", &user.Email, &user.Password)
 	if err != nil {
-		logrus.Error("Error inserting user:", err)
-		return user, err
+		return u, err
 	}
 
-	user, err = GetUser(id)
-	if err != nil {
-		logrus.Error("Error fetching user:", err)
-		return user, err
+	err = res.ScanFirst(&u)
+	if err == nil {
+		u, err = GetUser(u.XID)
 	}
 
-	return user, err
+	return u, err
 }
 
 func UpdateUser(u *User) error {
-	db := db.Open()
-
-	_, err := db.Exec(context.Background(), `UPDATE users SET email=$1, password=$2 WHERE id=$3;`, &u.Email, &u.Password, &u.ID)
-	if err != nil {
-		logrus.Error("Error updating user:", err)
-	}
-
+	_, err := db.Query("UPDATE users SET email=$1, password=$2 WHERE id=$3;", &u.Email, &u.Password, &u.XID)
 	return err
 }
 
 func DeleteUser(u *User) error {
-	db := db.Open()
-
-	_, err := db.Exec(context.Background(), `DELETE FROM users WHERE id=$1;`, &u.ID)
-	if err != nil {
-		logrus.Error("Error deleting user:", err)
-	}
-
+	_, err := db.Query("DELETE FROM users WHERE id=$1;", &u.XID)
 	return err
 }

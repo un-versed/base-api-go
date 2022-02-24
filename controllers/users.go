@@ -63,7 +63,7 @@ func (c *UsersController) Update(ctx iris.Context) {
 	id := ctx.Params().GetInt64Default("id", 0)
 
 	var u models.User
-	u.ID = id
+	u.XID = id
 
 	err := ctx.ReadJSON(&u)
 
@@ -88,7 +88,7 @@ func (c *UsersController) Delete(ctx iris.Context) {
 	id := ctx.Params().GetInt64Default("id", 0)
 
 	var u models.User
-	u.ID = id
+	u.XID = id
 
 	err := models.DeleteUser(&u)
 	if err != nil {
