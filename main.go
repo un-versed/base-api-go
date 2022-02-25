@@ -5,12 +5,21 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
 	"github.com/un-versed/base_api/application"
 	"github.com/un-versed/base_api/controllers"
 	"github.com/un-versed/base_api/db"
 )
+
+func getDefaultDatabaseConnectionString() string {
+	res := "postgres://postgres:postgres@localhost:5432/postgres"
+	env := os.Getenv("DATABASE_URL")
+	if len(env) > 0 {
+		res = env
+	}
+
+	return res
+}
 
 func getDefaultPort() int {
 	defaultEnvPort := 8080
@@ -36,6 +45,7 @@ func initLogger(logLevel logrus.Level) {
 
 func main() {
 	var serverPort = flag.Int("p", getDefaultPort(), "web server http port")
+	var pgConnString = flag.String("pg", getDefaultDatabaseConnectionString(), "Postgres connection string")
 	var logAll = flag.Bool("log-all", false, "Log all messages (trace level)")
 
 	flag.Parse()
@@ -45,19 +55,17 @@ func main() {
 		logLevel = logrus.TraceLevel
 	}
 
-	err := godotenv.Load()
+	err := db.Open(*pgConnString)
 	if err != nil {
-		logrus.Fatal("Error loading .env file")
+		logrus.Fatalf("Unable to connect to database: %s\n", err.Error())
 	}
+	defer db.Close()
 
 	initLogger(logLevel)
 
 	logrus.Debug("START")
 
 	_app := application.App()
-
-	conn := db.Open()
-	defer db.Close(conn)
 
 	controllers.CreateRoutes(_app.IrisApp())
 	_app.RunServer(*serverPort)

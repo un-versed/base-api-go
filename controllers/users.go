@@ -20,8 +20,14 @@ func (c *UsersController) Index(ctx iris.Context) {
 		return
 	}
 
+	tmp := make([]map[string]interface{}, len(users))
+
+	for i, u := range users {
+		tmp[i] = u.Serialize()
+	}
+
 	ctx.StatusCode(iris.StatusOK)
-	ctx.JSON(users)
+	ctx.JSON(tmp)
 }
 
 func (c *UsersController) Show(ctx iris.Context) {
@@ -35,7 +41,7 @@ func (c *UsersController) Show(ctx iris.Context) {
 	}
 
 	ctx.StatusCode(iris.StatusOK)
-	ctx.JSON(user)
+	ctx.JSON(user.Serialize())
 }
 
 func (c *UsersController) Store(ctx iris.Context) {
@@ -56,16 +62,16 @@ func (c *UsersController) Store(ctx iris.Context) {
 	}
 
 	ctx.StatusCode(iris.StatusOK)
-	ctx.JSON(user)
+	ctx.JSON(user.Serialize())
 }
 
 func (c *UsersController) Update(ctx iris.Context) {
 	id := ctx.Params().GetInt64Default("id", 0)
 
-	var u models.User
-	u.ID = id
+	var user models.User
+	user.ID = id
 
-	err := ctx.ReadJSON(&u)
+	err := ctx.ReadJSON(&user)
 
 	if err != nil {
 		ctx.StatusCode(iris.StatusBadRequest)
@@ -73,7 +79,7 @@ func (c *UsersController) Update(ctx iris.Context) {
 		return
 	}
 
-	err = models.UpdateUser(&u)
+	err = models.UpdateUser(&user)
 	if err != nil {
 		ctx.StatusCode(iris.StatusBadRequest)
 		ctx.JSON(models.NewApiError(err.Error()))
@@ -81,16 +87,16 @@ func (c *UsersController) Update(ctx iris.Context) {
 	}
 
 	ctx.StatusCode(iris.StatusOK)
-	ctx.JSON(u)
+	ctx.JSON(user.Serialize())
 }
 
 func (c *UsersController) Delete(ctx iris.Context) {
 	id := ctx.Params().GetInt64Default("id", 0)
 
-	var u models.User
-	u.ID = id
+	var user models.User
+	user.ID = id
 
-	err := models.DeleteUser(&u)
+	err := models.DeleteUser(&user)
 	if err != nil {
 		ctx.StatusCode(iris.StatusBadRequest)
 		ctx.JSON(models.NewApiError(err.Error()))

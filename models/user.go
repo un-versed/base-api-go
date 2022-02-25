@@ -3,7 +3,6 @@ package models
 import (
 	"context"
 
-	"github.com/sirupsen/logrus"
 	"github.com/un-versed/base_api/db"
 	"github.com/uptrace/bun"
 )
@@ -16,14 +15,22 @@ type User struct {
 	Password string `json:"password"`
 }
 
+func (u *User) Serialize() map[string]interface{} {
+	s := make(map[string]interface{})
+
+	s["id"] = u.ID
+	s["email"] = u.Email
+
+	return s
+}
+
 func GetUsers() ([]User, error) {
-	db := db.Open()
+	db := db.Conn()
 
 	var users []User
 
 	err := db.NewSelect().Model(&users).OrderExpr("id ASC").Scan(context.Background())
 	if err != nil {
-		logrus.Error("Error selecting users: %v\n", err)
 		return users, err
 	}
 
@@ -31,13 +38,12 @@ func GetUsers() ([]User, error) {
 }
 
 func GetUser(id int64) (User, error) {
-	db := db.Open()
+	db := db.Conn()
 
 	user := User{}
 
 	err := db.NewSelect().Model(&user).Where("id = ?", id).Scan(context.Background())
 	if err != nil {
-		logrus.Error("Error selecting user: %v\n", err)
 		return user, err
 	}
 
@@ -45,11 +51,10 @@ func GetUser(id int64) (User, error) {
 }
 
 func NewUser(u *User) (*User, error) {
-	db := db.Open()
+	db := db.Conn()
 
 	_, err := db.NewInsert().Model(u).Exec(context.Background())
 	if err != nil {
-		logrus.Error("Error inserting user: %v\n", err)
 		return u, err
 	}
 
@@ -57,23 +62,17 @@ func NewUser(u *User) (*User, error) {
 }
 
 func UpdateUser(u *User) error {
-	db := db.Open()
+	db := db.Conn()
 
 	_, err := db.NewUpdate().Model(u).WherePK().Exec(context.Background())
-	if err != nil {
-		logrus.Error("Error updating user: %v\n", err)
-	}
 
 	return err
 }
 
 func DeleteUser(u *User) error {
-	db := db.Open()
+	db := db.Conn()
 
 	_, err := db.NewDelete().Model(u).WherePK().Exec(context.Background())
-	if err != nil {
-		logrus.Error("Error deleting user: %v\n", err)
-	}
 
 	return err
 }
