@@ -14,7 +14,7 @@ type User struct {
 func GetUsers() ([]User, error) {
 	var ul []User
 
-	res, err := db.Query("SELECT id, email, password FROM users ORDER BY id ASC;")
+	res, err := db.Query("SELECT * FROM users ORDER BY id ASC;")
 	if err != nil {
 		logrus.Error(err)
 		return ul, err
@@ -40,25 +40,22 @@ func GetUser(id int64) (User, error) {
 func NewUser(user *User) (User, error) {
 	u := User{}
 
-	res, err := db.Query("INSERT INTO users (email, password) VALUES ($1, $2) RETURNING id;", &user.Email, &user.Password)
+	res, err := db.Query("INSERT INTO users (email, password) VALUES ($1, $2) RETURNING *;", user.Email, user.Password)
 	if err != nil {
 		return u, err
 	}
 
 	err = res.ScanFirst(&u)
-	if err == nil {
-		u, err = GetUser(u.XID)
-	}
 
 	return u, err
 }
 
 func UpdateUser(u *User) error {
-	_, err := db.Query("UPDATE users SET email=$1, password=$2 WHERE id=$3;", &u.Email, &u.Password, &u.XID)
+	_, err := db.Query("UPDATE users SET email=$1, password=$2 WHERE id=$3;", u.Email, u.Password, u.XID)
 	return err
 }
 
 func DeleteUser(u *User) error {
-	_, err := db.Query("DELETE FROM users WHERE id=$1;", &u.XID)
+	_, err := db.Query("DELETE FROM users WHERE id=$1;", u.XID)
 	return err
 }

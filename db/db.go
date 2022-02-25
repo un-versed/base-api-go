@@ -2,11 +2,9 @@ package db
 
 import (
 	"context"
-	"os"
 
 	"github.com/jackc/pgx/v4/pgxpool"
 	_ "github.com/lib/pq"
-	"github.com/sirupsen/logrus"
 )
 
 var conn *pgxpool.Pool
@@ -20,7 +18,6 @@ func Open(connString string) error {
 	c.Config().MaxConns = 10
 
 	if err != nil {
-		logrus.Error(os.Stderr, "Unable to connect to database: %v\n", err)
 		return err
 	}
 

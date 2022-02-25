@@ -11,6 +11,9 @@ require (
 )
 
 require (
+	github.com/fatih/color v1.13.0 // indirect
+	github.com/fogleman/gg v1.3.0 // indirect
+	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/google/go-cmp v0.5.6 // indirect
 	github.com/gopherjs/gopherjs v0.0.0-20220221023154-0b2280d3ff96 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
@@ -20,11 +23,14 @@ require (
 	github.com/jackc/pgservicefile v0.0.0-20200714003250-2b9c44734f2b // indirect
 	github.com/jackc/pgtype v1.10.0 // indirect
 	github.com/jackc/puddle v1.2.1 // indirect
+	github.com/jpoles1/gopherbadger v2.5.0+incompatible // indirect
 	github.com/jtolds/gls v4.20.0+incompatible // indirect
+	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/onsi/ginkgo v1.16.5 // indirect
 	github.com/onsi/gomega v1.18.1 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/smartystreets/assertions v1.2.1 // indirect
+	golang.org/x/image v0.0.0-20211028202545-6944b10bf410 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
