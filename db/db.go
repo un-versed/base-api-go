@@ -15,11 +15,11 @@ func Conn() *pgxpool.Pool {
 
 func Open(connString string) error {
 	c, err := pgxpool.Connect(context.Background(), connString)
-	c.Config().MaxConns = 10
-
 	if err != nil {
 		return err
 	}
+
+	c.Config().MaxConns = 10
 
 	conn = c
 	return nil
