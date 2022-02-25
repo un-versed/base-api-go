@@ -5,6 +5,7 @@ import (
 
 	"github.com/jackc/pgx/v4/pgxpool"
 	_ "github.com/lib/pq"
+	"github.com/sirupsen/logrus"
 )
 
 var conn *pgxpool.Pool
@@ -15,11 +16,12 @@ func Conn() *pgxpool.Pool {
 
 func Open(connString string) error {
 	c, err := pgxpool.Connect(context.Background(), connString)
-	c.Config().MaxConns = 10
-
 	if err != nil {
+		logrus.Error("Unable to connect to database: %v\n", err)
 		return err
 	}
+
+	c.Config().MaxConns = 10
 
 	conn = c
 	return nil
