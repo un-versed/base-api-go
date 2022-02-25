@@ -3,9 +3,11 @@ module github.com/un-versed/base_api
 go 1.17
 
 require (
+	github.com/jackc/pgx/v4 v4.15.0
 	github.com/jmoiron/sqlx v1.3.4
 	github.com/kataras/iris/v12 v12.2.0-alpha5.0.20220122232131-4899fe95f47d
 	github.com/sirupsen/logrus v1.8.1
+	github.com/uptrace/bun/dialect/pgdialect v1.0.25
 )
 
 require (
@@ -18,12 +20,10 @@ require (
 	github.com/jackc/pgproto3/v2 v2.2.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20200714003250-2b9c44734f2b // indirect
 	github.com/jackc/pgtype v1.10.0 // indirect
-	github.com/jackc/pgx/v4 v4.15.0 // indirect
 	github.com/jackc/puddle v1.2.1 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/ryanuber/columnize v2.1.0+incompatible // indirect
 	github.com/tmthrgd/go-hex v0.0.0-20190904060850-447a3041c3bc // indirect
-	github.com/uptrace/bun/dialect/pgdialect v1.0.25 // indirect
 )
 
 require (
