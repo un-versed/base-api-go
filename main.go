@@ -55,7 +55,10 @@ func main() {
 		logLevel = logrus.TraceLevel
 	}
 
-	db.Open(*pgConnString)
+	err := db.Open(*pgConnString)
+	if err != nil {
+		logrus.Fatalf("Unable to connect to database: %s\n", err.Error())
+	}
 	defer db.Close()
 
 	initLogger(logLevel)
