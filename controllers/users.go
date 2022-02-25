@@ -56,7 +56,7 @@ func (c *UsersController) Store(ctx iris.Context) {
 	}
 
 	ctx.StatusCode(iris.StatusOK)
-	ctx.JSON(user)
+	ctx.JSON(iris.Map(user.Serialize()))
 }
 
 func (c *UsersController) Update(ctx iris.Context) {

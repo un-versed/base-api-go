@@ -1,14 +1,22 @@
 package models
 
 import (
-	"github.com/sirupsen/logrus"
 	"github.com/un-versed/base_api/db"
 )
 
 type User struct {
-	XID      int64  `json:"id" db:"id"`
+	XID      int64  `json:"id" db:"id"` // 0
 	Email    string `json:"email"`
 	Password string `json:"password"`
+}
+
+func (u *User) Serialize() map[string]interface{} {
+	s := make(map[string]interface{})
+
+	s["id"] = u.XID
+	s["email"] = u.Email
+
+	return s
 }
 
 func GetUsers() ([]User, error) {
@@ -16,7 +24,6 @@ func GetUsers() ([]User, error) {
 
 	res, err := db.Query("SELECT * FROM users ORDER BY id ASC;")
 	if err != nil {
-		logrus.Error(err)
 		return ul, err
 	}
 
