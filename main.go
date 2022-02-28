@@ -3,25 +3,12 @@ package main
 import (
 	"flag"
 	"os"
-	"strconv"
 
 	"github.com/sirupsen/logrus"
 	"github.com/un-versed/base_api/application"
 	"github.com/un-versed/base_api/controllers"
+	"github.com/un-versed/base_api/helpers"
 )
-
-func getDefaultPort() int {
-	defaultEnvPort := 8080
-	envPort := os.Getenv("SERVER_PORT")
-	if len(envPort) > 0 {
-		p, err := strconv.Atoi(envPort)
-		if err == nil {
-			defaultEnvPort = p
-		}
-	}
-
-	return defaultEnvPort
-}
 
 func initLogger(logLevel logrus.Level) {
 	logrus.SetFormatter(&logrus.TextFormatter{
@@ -33,7 +20,7 @@ func initLogger(logLevel logrus.Level) {
 }
 
 func main() {
-	var serverPort = flag.Int("p", getDefaultPort(), "web server http port")
+	var serverPort = flag.Int("p", helpers.GetDefaultPort(), "web server http port")
 	var logAll = flag.Bool("log-all", false, "Log all messages (trace level)")
 
 	flag.Parse()
