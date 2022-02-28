@@ -12,16 +12,26 @@ import (
 )
 
 func getDefaultPort() int {
-	defaultEnvPort := 8080
-	envPort := os.Getenv("SERVER_PORT")
-	if len(envPort) > 0 {
-		p, err := strconv.Atoi(envPort)
+	res := 8080
+	env := os.Getenv("SERVER_PORT")
+	if len(env) > 0 {
+		p, err := strconv.Atoi(env)
 		if err == nil {
-			defaultEnvPort = p
+			res = p
 		}
 	}
 
-	return defaultEnvPort
+	return res
+}
+
+func getDefaultDatabaseConnectionString() string {
+	res := "postgres://postgres:postgres@localhost:5432/postgres"
+	env := os.Getenv("DATABASE_URL")
+	if len(env) > 0 {
+		res = env
+	}
+
+	return res
 }
 
 func initLogger(logLevel logrus.Level) {
@@ -35,6 +45,7 @@ func initLogger(logLevel logrus.Level) {
 
 func main() {
 	var serverPort = flag.Int("p", getDefaultPort(), "web server http port")
+	var pgConnString = flag.String("pg", getDefaultDatabaseConnectionString(), "Postgres connection string")
 	var logAll = flag.Bool("log-all", false, "Log all messages (trace level)")
 
 	flag.Parse()
@@ -44,13 +55,17 @@ func main() {
 		logLevel = logrus.TraceLevel
 	}
 
+	err := db.Open(*pgConnString)
+	if err != nil {
+		logrus.Fatalf("Unable to connect to database: %s\n", err.Error())
+	}
+	defer db.Close()
+
 	initLogger(logLevel)
 
 	logrus.Debug("START")
 
 	_app := application.App()
-
-	db.Open()
 
 	controllers.CreateRoutes(_app.IrisApp())
 	_app.RunServer(*serverPort)

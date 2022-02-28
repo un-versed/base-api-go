@@ -1,24 +1,26 @@
 package db
 
 import (
-	"log"
-
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
-	"github.com/sirupsen/logrus"
 )
 
-func Open() *sqlx.DB {
-	db, err := sqlx.Connect("postgres", "user=gustavo dbname=go_base_api password=123teste sslmode=disable")
-	if err != nil {
-		log.Fatalln(err)
-	} else {
-		logrus.Info("Connected to database")
-	}
+var conn *sqlx.DB
 
-	return db
+func Conn() *sqlx.DB {
+	return conn
 }
 
-func Close(db *sqlx.DB) error {
-	return db.Close()
+func Open(connString string) error {
+	c, err := sqlx.Connect("postgres", connString)
+	if err != nil {
+		return err
+	}
+
+	conn = c
+	return nil
+}
+
+func Close() {
+	conn.Close()
 }

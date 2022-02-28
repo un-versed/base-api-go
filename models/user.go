@@ -11,9 +11,7 @@ type User struct {
 }
 
 func GetUsers() ([]User, error) {
-	db := db.Open()
-	defer db.Close()
-
+	db := db.Conn()
 	users := []User{}
 
 	err := db.Select(&users, "SELECT * FROM users ORDER BY id ASC;")
@@ -22,8 +20,7 @@ func GetUsers() ([]User, error) {
 }
 
 func GetUser(id int64) (User, error) {
-	db := db.Open()
-	defer db.Close()
+	db := db.Conn()
 
 	user := User{}
 
@@ -33,8 +30,7 @@ func GetUser(id int64) (User, error) {
 }
 
 func NewUser(u *User) (User, error) {
-	db := db.Open()
-	defer db.Close()
+	db := db.Conn()
 
 	user := User{}
 
@@ -59,8 +55,7 @@ func NewUser(u *User) (User, error) {
 }
 
 func UpdateUser(u *User) error {
-	db := db.Open()
-	defer db.Close()
+	db := db.Conn()
 
 	_, err := db.NamedExec(`UPDATE users SET email=:email, password=:password WHERE id=:id;`, u)
 
@@ -68,8 +63,7 @@ func UpdateUser(u *User) error {
 }
 
 func DeleteUser(u *User) error {
-	db := db.Open()
-	defer db.Close()
+	db := db.Conn()
 
 	_, err := db.NamedExec(`DELETE FROM users WHERE id=:id;`, u)
 
