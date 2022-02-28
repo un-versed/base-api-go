@@ -79,7 +79,7 @@ func (c *UsersController) Update(ctx iris.Context) {
 		return
 	}
 
-	err = models.UpdateUser(&user)
+	_, err = models.UpdateUser(&user)
 	if err != nil {
 		ctx.StatusCode(iris.StatusBadRequest)
 		ctx.JSON(models.NewApiError(err.Error()))

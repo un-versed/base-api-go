@@ -61,12 +61,12 @@ func NewUser(u *User) (*User, error) {
 	return u, err
 }
 
-func UpdateUser(u *User) error {
+func UpdateUser(u *User) (*User, error) {
 	db := db.Conn()
 
 	_, err := db.NewUpdate().Model(u).WherePK().Exec(context.Background())
 
-	return err
+	return u, err
 }
 
 func DeleteUser(u *User) error {
