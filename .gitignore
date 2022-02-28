@@ -18,6 +18,7 @@ go.sum
 #IDE working directories
 .idea/
 .vscode
+.env
 
 #build items
 desafio-dev-api-rest
