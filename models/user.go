@@ -5,7 +5,7 @@ import (
 )
 
 type User struct {
-	XID      int64  `json:"id" db:"id"` // 0
+	XID      int64  `json:"id" db:"id"`
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
