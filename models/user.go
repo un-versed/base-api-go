@@ -1,6 +1,8 @@
 package models
 
 import (
+	"context"
+
 	"github.com/un-versed/base_api/db"
 )
 
@@ -57,12 +59,20 @@ func NewUser(user *User) (User, error) {
 	return u, err
 }
 
-func UpdateUser(u *User) error {
-	_, err := db.Query("UPDATE users SET email=$1, password=$2 WHERE id=$3;", u.Email, u.Password, u.XID)
-	return err
+func UpdateUser(u *User) (User, error) {
+	user := User{}
+
+	_, err := db.Conn().Exec(context.Background(), "UPDATE users SET email=$1, password=$2 WHERE id=$3;", u.Email, u.Password, u.XID)
+	if err != nil {
+		return user, err
+	}
+
+	user, err = GetUser(u.XID)
+	return user, err
 }
 
 func DeleteUser(u *User) error {
-	_, err := db.Query("DELETE FROM users WHERE id=$1;", u.XID)
+	_, err := db.Conn().Exec(context.Background(), "DELETE FROM users WHERE id=$1;", u.XID)
+
 	return err
 }
