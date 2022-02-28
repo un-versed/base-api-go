@@ -20,14 +20,14 @@ func (c *UsersController) Index(ctx iris.Context) {
 		return
 	}
 
-	tmp := make([]map[string]interface{}, len(users))
+	serializedUsers := make([]map[string]interface{}, len(users))
 
 	for i, u := range users {
-		tmp[i] = u.Serialize()
+		serializedUsers[i] = u.Serialize()
 	}
 
 	ctx.StatusCode(iris.StatusOK)
-	ctx.JSON(tmp)
+	ctx.JSON(serializedUsers)
 }
 
 func (c *UsersController) Show(ctx iris.Context) {

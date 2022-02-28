@@ -11,6 +11,19 @@ import (
 	"github.com/un-versed/base_api/db"
 )
 
+func getDefaultPort() int {
+	res := 8080
+	env := os.Getenv("SERVER_PORT")
+	if len(env) > 0 {
+		p, err := strconv.Atoi(env)
+		if err == nil {
+			res = p
+		}
+	}
+
+	return res
+}
+
 func getDefaultDatabaseConnectionString() string {
 	res := "postgres://postgres:postgres@localhost:5432/postgres"
 	env := os.Getenv("DATABASE_URL")
@@ -19,19 +32,6 @@ func getDefaultDatabaseConnectionString() string {
 	}
 
 	return res
-}
-
-func getDefaultPort() int {
-	defaultEnvPort := 8080
-	envPort := os.Getenv("SERVER_PORT")
-	if len(envPort) > 0 {
-		p, err := strconv.Atoi(envPort)
-		if err == nil {
-			defaultEnvPort = p
-		}
-	}
-
-	return defaultEnvPort
 }
 
 func initLogger(logLevel logrus.Level) {
