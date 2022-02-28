@@ -43,12 +43,14 @@ func (app *Application) initialize() {
 		// Columns:            false,
 		MessageContextKeys: nil,
 		MessageHeaderKeys:  nil,
-		LogFunc: func(now time.Time, latency time.Duration, status, ip, method, path string, message interface{}, headerMessage interface{}) {
-			l := fmt.Sprintf("ACCESS [%s] %s - %s %s",
+		LogFunc: func(_ time.Time, latency time.Duration, status, ip, method, path string, _ interface{}, _ interface{}) {
+			l := fmt.Sprintf("ACCESS [%s] %s - %s %s (%s)",
 				ip,
 				status,
 				method,
-				path)
+				path,
+				latency,
+			)
 			logrus.Info(l)
 		},
 		Skippers: nil,
