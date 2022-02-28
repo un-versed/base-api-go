@@ -3,9 +3,7 @@ module github.com/un-versed/base_api
 go 1.17
 
 require (
-	github.com/jackc/pgconn v1.11.0
 	github.com/jackc/pgx/v4 v4.15.0
-	github.com/joho/godotenv v1.4.0
 	github.com/kataras/iris/v12 v12.2.0-alpha5.0.20220122232131-4899fe95f47d
 	github.com/sirupsen/logrus v1.8.1
 )
@@ -17,6 +15,7 @@ require (
 	github.com/google/go-cmp v0.5.6 // indirect
 	github.com/gopherjs/gopherjs v0.0.0-20220221023154-0b2280d3ff96 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
+	github.com/jackc/pgconn v1.11.0 // indirect
 	github.com/jackc/pgio v1.0.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgproto3/v2 v2.2.0 // indirect
@@ -31,7 +30,6 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/smartystreets/assertions v1.2.1 // indirect
 	golang.org/x/image v0.0.0-20211028202545-6944b10bf410 // indirect
-	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
 require (
