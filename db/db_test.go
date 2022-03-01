@@ -24,7 +24,7 @@ func TestOpen(t *testing.T) {
 
 func TestConn(t *testing.T) {
 	conn := Conn()
-	if reflect.TypeOf(conn).String() != "*bun.DB" {
+	if reflect.TypeOf(conn).String() != "*pgxpool.Pool" {
 		t.Errorf("Unable to create to connection pointer.")
 	}
 }
