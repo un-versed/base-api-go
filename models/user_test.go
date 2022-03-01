@@ -113,3 +113,12 @@ func TestDeleteUser(t *testing.T) {
 		t.Errorf("Unable to delete user: %s\n", err.Error())
 	}
 }
+
+func TestUserSerialize(t *testing.T) {
+	user := User{ID: 1, Email: "test@testing.go", Password: "123asd"}
+	serialized := user.Serialize()
+
+	if serialized["password"] != nil {
+		t.Errorf("Failed removing password with Serialize().")
+	}
+}
