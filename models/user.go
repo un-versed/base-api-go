@@ -54,12 +54,16 @@ func NewUser(u *User) (User, error) {
 	return user, err
 }
 
-func UpdateUser(u *User) error {
+func UpdateUser(u *User) (User, error) {
 	db := db.Conn()
 
 	_, err := db.NamedExec(`UPDATE users SET email=:email, password=:password WHERE id=:id;`, u)
+	if err != nil {
+		return User{}, err
+	}
+	user, err := GetUser(u.ID)
 
-	return err
+	return user, err
 }
 
 func DeleteUser(u *User) error {

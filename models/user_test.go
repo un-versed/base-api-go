@@ -28,9 +28,11 @@ func TestNewUser(t *testing.T) {
 		t.Errorf("Expected u.Email to be equal %+s. Got %+s", user.Email, u.Email)
 	case u.Password != user.Password:
 		t.Errorf("Expected u.Password to be equal %+s. Got %+s", user.Password, u.Password)
-	case u.ID == 0:
+	case u.ID <= 0:
 		t.Errorf("Expected u.ID to be greater than 0")
 	}
+
+	user = u
 }
 
 func TestGetUsers(t *testing.T) {
@@ -57,9 +59,9 @@ func TestGetUser(t *testing.T) {
 	}
 	defer db.Close()
 
-	u, err := GetUser(1)
+	u, err := GetUser(user.ID)
 	if err != nil {
-		t.Errorf("Unable to get users: %s\n", err.Error())
+		t.Errorf("Unable to get user: %s\n", err.Error())
 	}
 
 	switch {
@@ -79,7 +81,8 @@ func TestUpdateUser(t *testing.T) {
 	}
 	defer db.Close()
 
-	newUser := User{ID: 1, Email: "baseapi_update@test.com", Password: "123"}
+	ID := user.ID
+	newUser := User{ID: ID, Email: "baseapi_update@test.com", Password: "123"}
 
 	u, err := UpdateUser(&newUser)
 	if err != nil {
@@ -108,7 +111,7 @@ func TestDeleteUser(t *testing.T) {
 		t.Errorf("Unable to delete user: %s\n", err.Error())
 	}
 
-	_, err = GetUser(1)
+	_, err = GetUser(user.ID)
 	if err == nil {
 		t.Errorf("Unable to delete user: %s\n", err.Error())
 	}
