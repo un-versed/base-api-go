@@ -10,6 +10,15 @@ type User struct {
 	Password string `json:"password" db:"password"`
 }
 
+func (u *User) Serialize() map[string]interface{} {
+	s := make(map[string]interface{})
+
+	s["id"] = u.ID
+	s["email"] = u.Email
+
+	return s
+}
+
 func GetUsers() ([]User, error) {
 	db := db.Conn()
 	users := []User{}
