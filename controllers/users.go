@@ -90,15 +90,7 @@ func (c *UsersController) Delete(ctx iris.Context) {
 	var u models.User
 	u.ID = id
 
-	err := ctx.ReadJSON(&u)
-
-	if err != nil {
-		ctx.StatusCode(iris.StatusBadRequest)
-		ctx.JSON(models.NewApiError(err.Error()))
-		return
-	}
-
-	err = models.DeleteUser(&u)
+	err := models.DeleteUser(&u)
 	if err != nil {
 		ctx.StatusCode(iris.StatusBadRequest)
 		ctx.JSON(models.NewApiError(err.Error()))
