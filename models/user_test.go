@@ -118,7 +118,7 @@ func TestDeleteUser(t *testing.T) {
 }
 
 func TestUserSerialize(t *testing.T) {
-	user := User{ID: 1, Email: "test@testing.go", Password: "123asd"}
+	user := User{XID: 1, Email: "test@testing.go", Password: "123asd"}
 	serialized := user.Serialize()
 
 	if serialized["password"] != nil {
