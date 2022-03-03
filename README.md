@@ -23,6 +23,12 @@ The repository is organized in 3 different branches:
 ### master
 The master branch contains only the file structres and example controllers. No DB, just the Iris framework.
 
+#### [Iris](https://github.com/kataras/iris)
+
+> Iris is a fast, simple yet fully featured and very efficient web framework for Go.
+> It provides a beautifully expressive and easy to use foundation for your next website or API.
+
+
 ### [bun](https://bun.uptrace.dev/)
 > Simple and performant DB client for PostgreSQL, MySQL, and SQLite.
 
