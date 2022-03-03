@@ -81,3 +81,5 @@ make clean
 Feel free to contribute.
 
 Made with ❤ in Brazil
+
+The logo is from @ashleymcnamara and can be found [here](https://github.com/ashleymcnamara/gophers).
