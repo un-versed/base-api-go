@@ -1,7 +1,7 @@
 
 <p align="center"><img src="https://raw.githubusercontent.com/ashleymcnamara/gophers/master/RickAndMorty.png" width="360"></p>
 
-<a href='https://github.com/jpoles1/gopherbadger' target='_blank'>![gopherbadger-tag-do-not-edit](https://img.shields.io/badge/Go%20Coverage-93%25-brightgreen.svg?longCache=true&style=flat)</a>
+<a href='https://github.com/jpoles1/gopherbadger' target='_blank'>![gopherbadger-tag-do-not-edit](https://img.shields.io/badge/Go%20Coverage-80%25-brightgreen.svg?longCache=true&style=flat)</a>
 
 # Go + Iris - Base API
 This is an example API, built with [Go](https://go.dev/) and [Iris](https://www.iris-go.com/). The codebase was created to show a working backend application in Go, with different options of database clients.
