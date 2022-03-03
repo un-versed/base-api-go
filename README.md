@@ -3,7 +3,7 @@
 
 <a href='https://github.com/jpoles1/gopherbadger' target='_blank'>![gopherbadger-tag-do-not-edit](https://img.shields.io/badge/Go%20Coverage-93%25-brightgreen.svg?longCache=true&style=flat)</a>
 
-# Go + Iris - Base API <a href="README_PTBR.md"><img width="20px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Flag_of_Brazil.svg/800px-Flag_of_Brazil.svg.png?20220111182208" /></a>
+# Go + Iris - Base API <a href="README-PTBR.md"><img width="20px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Flag_of_Brazil.svg/800px-Flag_of_Brazil.svg.png?20220111182208" /></a>
 
 This is an example API, built with [Go](https://go.dev/) and [Iris](https://www.iris-go.com/). The codebase was created to show a working backend application in Go, with different options of database clients.
 
